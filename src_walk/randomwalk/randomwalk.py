@@ -29,10 +29,10 @@ class RandomWalk:
         """
 
         # check the "steps" value to ensure the value is OK to generate
-        if size < 1:
-            raise ValueError("size must be ≥ 1")
-        if steps < 1:
-            raise ValueError("steps must be ≥ 1")
+        if not isinstance(steps, int) or steps < 1:
+            raise ValueError("steps must be a positive integer")
+        if not isinstance(size, int) or size < 1:
+            raise ValueError("size must be a positive integer")
 
         self.steps = steps
         # Generate valid step values from -size to size excluding 0

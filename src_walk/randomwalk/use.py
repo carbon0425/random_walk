@@ -6,6 +6,7 @@ large numbers of walks.
 """
 
 from collections import namedtuple
+from typing import Generator
 import randomwalk as rw
 import tqdm
 
@@ -13,13 +14,13 @@ import tqdm
 Result = namedtuple("Result", ["x_coords", "y_coords"])  # Fixed comma position
 
 
-def use_randomwalk(steps: int,
+def use_randomwalk(total_walks: int,
                    walk_step: int,
-                   size: int) -> Result:
+                   size: int) -> Generator(Result, Result, ...):
     """Generate multiple random walk results through a memory-efficient generator.
 
     Args:
-        steps: Number of complete walks to generate
+        total_walks: Number of complete walks to generate
         walk_step: Number of steps per individual walk
         size: Maximum step magnitude for the random walk (exclusive)
 
@@ -35,11 +36,10 @@ def use_randomwalk(steps: int,
         Uses generator pattern to handle large numbers of walks efficiently
     """
     # Initialize random walk generator with specified parameters
-    tqdm
     randomwalk = rw.RandomWalk(walk_step, size)
 
     # Generate requested number of walks
-    for _ in tqdm.tqdm(range(steps),
+    for _ in tqdm.tqdm(range(total_walks),
                        desc="walk gernerating...",
                        unit="walk",
                        colour="black"):
