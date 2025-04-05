@@ -1,7 +1,7 @@
 """
 A class to simulate 2D random walks using NumPy vectorization.
 
-The walk consists of discrete steps in random directions (x or y axis)
+The walk consists of discrete steps in random directions (x-axis or y-axis)
 with configurable step sizes.
 """
 
@@ -15,7 +15,8 @@ class RandomWalk:
         step_values (ndarray): Valid step sizes available for selection.
     """
 
-    def __init__(self, steps: int, size: int) -> None:
+    def __init__(self, steps: int,
+                 size: int) -> None:
         """Initialize random walk parameters.
 
         Args:
@@ -26,12 +27,20 @@ class RandomWalk:
         Note:
             The step values exclude 0 to ensure movement at each step.
         """
+
+        # check the "steps" value to ensure the value is OK to generate
+        if size < 1:
+            raise ValueError("size must be ≥ 1")
+        if steps < 1:
+            raise ValueError("steps must be ≥ 1")
+
         self.steps = steps
         # Generate valid step values from -size to size excluding 0
-        self.step_values = np.concatenate((
-            np.arange(-size, 0, 1),  # Negative steps
-            np.arange(1, size+1, 1)   # Positive steps
-        ))
+        self.step_values = np.setdiff1d(
+            np.arange(-size, size + 1),
+            [0],  # exclude 0
+            assume_unique=True
+        )
 
     def __call__(self) -> tuple[np.ndarray, np.ndarray]:
         """Generate and return the random walk coordinates.
@@ -45,6 +54,7 @@ class RandomWalk:
             3. Assign steps to x/y directions using vectorized operations
             4. Calculate cumulative sum for coordinates
         """
+
         # Generate random directions (0 for x-axis, 1 for y-axis)
         directions = np.random.choice([0, 1], size=self.steps)
 
